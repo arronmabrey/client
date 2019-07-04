@@ -1414,7 +1414,7 @@ func TestFavoriteConflicts(t *testing.T) {
 	}
 
 	t.Log("Force a stuck conflict and make sure it's captured correctly")
-	err = sfs.SimpleFSForceStuckConflict(ctx, pathPub)
+	err = sfs.SimpleFSForceStuckConflict(ctx, keybase1.SimpleFSForceStuckConflictArg{Path: pathPub})
 	require.NoError(t, err)
 	favs, err = sfs.SimpleFSListFavorites(ctx)
 	require.NoError(t, err)
@@ -1439,7 +1439,7 @@ func TestFavoriteConflicts(t *testing.T) {
 	require.Equal(t, 1, notStuck)
 
 	t.Log("Resolve the conflict")
-	err = sfs.SimpleFSClearConflictState(ctx, pathPub)
+	err = sfs.SimpleFSClearConflictState(ctx, keybase1.SimpleFSClearConflictStateArg{Path: pathPub})
 	require.NoError(t, err)
 	favs, err = sfs.SimpleFSListFavorites(ctx)
 	require.NoError(t, err)
@@ -1489,7 +1489,7 @@ func TestFavoriteConflicts(t *testing.T) {
 	require.Len(t, listResult.Entries, 12)
 
 	t.Log("Finish resolving the conflict")
-	err = sfs.SimpleFSFinishResolvingConflict(ctx, pathLocalView)
+	err = sfs.SimpleFSFinishResolvingConflict(ctx, keybase1.SimpleFSFinishResolvingConflictArg{Path: pathLocalView})
 	require.NoError(t, err)
 	favs, err = sfs.SimpleFSListFavorites(ctx)
 	require.NoError(t, err)
