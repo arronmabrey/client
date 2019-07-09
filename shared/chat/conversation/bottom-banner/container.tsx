@@ -1,10 +1,9 @@
 import * as Constants from '../../../constants/chat2'
-import * as ProfileGen from '../../../actions/profile-gen'
 import * as React from 'react'
-import * as Tracker2Gen from '../../../actions/tracker2-gen'
 import * as Types from '../../../constants/types/chat2'
-import {BrokenTrackerBanner, InviteBanner} from '.'
-import {connect, isMobile} from '../../../util/container'
+import * as Kb from '../../../common-adapters'
+import {InviteBanner} from '.'
+import {connect} from '../../../util/container'
 
 type OwnProps = {
   conversationIDKey: Types.ConversationIDKey
@@ -12,7 +11,6 @@ type OwnProps = {
 
 type Props = {
   type: 'invite' | 'none' | 'broken'
-  onClick: (username: string) => void
   users: Array<string>
 }
 
@@ -22,7 +20,7 @@ class BannerContainer extends React.PureComponent<Props> {
       case 'invite':
         return <InviteBanner users={this.props.users} />
       case 'broken':
-        return <BrokenTrackerBanner onClick={this.props.onClick} users={this.props.users} />
+        return <Kb.ProofBrokenBanner users={this.props.users} />
       case 'none':
         return null
     }
@@ -41,11 +39,7 @@ const mapStateToProps = (state, {conversationIDKey}) => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  onClick: isMobile
-    ? (username: string) => dispatch(ProfileGen.createShowUserProfile({username}))
-    : (username: string) => dispatch(Tracker2Gen.createShowUser({asTracker: true, username})),
-})
+const mapDispatchToProps = dispatch => ({})
 
 const mergeProps = (stateProps, dispatchProps) => {
   let type
@@ -72,7 +66,6 @@ const mergeProps = (stateProps, dispatchProps) => {
   }
 
   return {
-    onClick: dispatchProps.onClick,
     type,
     users: users || [],
   }
